@@ -22,34 +22,31 @@ func main() {
 		return
 	}
 
-	sum := checkValidity(ranges)
+	sum := 0
+
+	for _, r := range ranges {
+		sum += checkValidity(r)
+	}
 
 	fmt.Println(sum)
 }
 
-func checkValidity(ranges []Range) (sum int) {
+func checkValidity(r Range) (sum int) {
 
-	for _, r := range ranges {
+	for id := r.startId; id <= r.endId; id++ {
+		idStr := strconv.Itoa(id)
+		pattern := ""
 
-		for i := r.startId; i < r.endId+1; i++ {
-			id := strconv.Itoa(i)
-			word := ""
+		for _, c := range idStr[:len(idStr)/2] {
+			pattern += string(c)
 
-			for _, c := range id {
-				word += string(c)
-				if id == word {
-					continue
-				}
+			count := strings.Count(idStr, pattern)
 
-				count := strings.Count(id, word)
-
-				if count > 0 && count*len(word) == len(id) {
-					sum += i
-					break
-				}
+			if count*len(pattern) == len(idStr) {
+				sum += id
+				break
 			}
 		}
-
 	}
 
 	return sum
